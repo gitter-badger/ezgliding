@@ -5,24 +5,26 @@ public abstract class Optimizer {
 	protected Flight flight;
 
 	protected int numPoints;
+	
+	protected int start;
+
+	protected int end;
 
 	public Optimizer(Flight flight, int numPoints) {
+		this(flight, numPoints, 0, flight != null ? flight.fixes().size()-1 : 0);
+	}
+
+	public Optimizer(Flight flight, int numPoints, int start, int end) {
 		if (flight == null) throw new IllegalArgumentException("Flight cannot be null");
 		if (numPoints < 2) throw new IllegalArgumentException("Invalid number of points :: < 3");
 
 		this.flight = flight;
 		this.numPoints = numPoints;
+		this.start = start;
+		this.end = end;
 	}
 
 	public abstract Result optimize();
-
-	public int flightStart() {
-		return 0;
-	}
-
-	public int flightEnd() {
-		return flight.fixes().size();
-	}
 
 	public class Result implements Comparable<Result> {
 		

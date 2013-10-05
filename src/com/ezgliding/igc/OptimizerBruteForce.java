@@ -10,7 +10,11 @@ public class OptimizerBruteForce extends Optimizer {
 	private List<Fix> fixes;
 
 	public OptimizerBruteForce(Flight flight, int numPoints) {
-		super(flight, numPoints);
+		this(flight, numPoints, 0, flight != null ? flight.fixes().size() : 0);
+	}
+
+	public OptimizerBruteForce(Flight flight, int numPoints, int start, int end) {
+		super(flight, numPoints, start, end);
 	
 		if (flight != null) fixes = flight.fixes();
 	}
@@ -39,10 +43,10 @@ public class OptimizerBruteForce extends Optimizer {
 		Fix[] result = new Fix[3];
 
 		double distance = 0.0;
-		List<Fix> fixes = flight.fixes().subList(flightStart(), flightEnd());
-		for (int i=0; i<fixes.size()-2; i++) {
-			for (int j=i+1; j<fixes.size()-1; j++) {
-				for (int z=j+1; z<fixes.size(); z++) {
+		List<Fix> fixes = flight.fixes().subList(start, end);
+		for (int i=start; i<end-2; i++) {
+			for (int j=i+1; j<end-1; j++) {
+				for (int z=j+1; z<end; z++) {
 					distance = distance(i, j) + distance(j, z);
 					if (distance > max) {
 						max = distance;
@@ -63,11 +67,11 @@ public class OptimizerBruteForce extends Optimizer {
 		Fix[] result = new Fix[4];
 
 		double distance = 0.0;
-		List<Fix> fixes = flight.fixes().subList(flightStart(), flightEnd());
+		List<Fix> fixes = flight.fixes().subList(start, end);
 		for (int i=0; i<fixes.size()-3; i++) {
-			for (int j=i+1; j<fixes.size()-2; j++) {
-				for (int w=j+1; w<fixes.size()-1; w++) {
-					for (int z=w+1; z<fixes.size(); z++) {
+			for (int j=start+1; j<end-2; j++) {
+				for (int w=j+1; w<end-1; w++) {
+					for (int z=w+1; z<end; z++) {
 						distance =
 							distance(i, j) + distance(j, w) + distance(w, z);
 						if (distance > max) {
@@ -91,12 +95,12 @@ public class OptimizerBruteForce extends Optimizer {
 		Fix[] result = new Fix[5];
 
 		double distance = 0.0;
-		List<Fix> fixes = flight.fixes().subList(flightStart(), flightEnd());
-		for (int i=0; i<fixes.size()-4; i++) {
-			for (int j=i+1; j<fixes.size()-3; j++) {
-				for (int w=j+1; w<fixes.size()-2; w++) {
-					for (int y=w+1; y<fixes.size()-1; y++) {
-						for (int z=y+1; z<fixes.size(); z++) {
+		List<Fix> fixes = flight.fixes().subList(start, end);
+		for (int i=start; i<end-4; i++) {
+			for (int j=i+1; j<end-3; j++) {
+				for (int w=j+1; w<end-2; w++) {
+					for (int y=w+1; y<end-1; y++) {
+						for (int z=y+1; z<end; z++) {
 							distance = 
 								distance(i, j) + distance(j, w)
 								+ distance(w, y) + distance(y, z);

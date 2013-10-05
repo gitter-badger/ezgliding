@@ -11,12 +11,16 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OptimizerBrokenLine extends Optimizer {
+public class OptimizerBrokenLine extends Optimizer implements Iterable {
 
 	private static Logger logger = Logger.getLogger(OptimizerBrokenLine.class.getName());
 
 	public OptimizerBrokenLine(Flight flight, int numPoints) {
-		super(flight, numPoints);
+		this(flight, numPoints, 0, flight != null ? flight.fixes().size() : 0);
+	}
+
+	public OptimizerBrokenLine(Flight flight, int numPoints, int start, int end) {
+		super(flight, numPoints, start, end);
 	}
 
 	@Override
@@ -97,6 +101,7 @@ public class OptimizerBrokenLine extends Optimizer {
 		}
 	}
 
+	@Override
 	public Iterator<Candidate> iterator() {
 		return new CandidateIterator();
 	}
@@ -114,16 +119,18 @@ public class OptimizerBrokenLine extends Optimizer {
 
 			// We start with a candidate containing only one rectangle (with all points)
 			ArrayList<RectangleSet> initialSet = new ArrayList<RectangleSet>();
-			initialSet.add(new RectangleSet(flight.fixes().subList(flightStart(), flightEnd())));
+			initialSet.add(new RectangleSet(flight.fixes().subList(start, end)));
 			maxTree.add(new Candidate(initialSet));
 		}
 
+		@Override
 		public boolean hasNext() { 
 			if (maxTree != null && maxTree.size() != 0)
 				return true; 
 			return false;
 		}
 
+		@Override
 		public Candidate next() { 
 			if (!hasNext()) return null;
 	
@@ -145,6 +152,7 @@ public class OptimizerBrokenLine extends Optimizer {
 			return current; 
 		}
 
+		@Override
 		public void remove() { }
 
 		protected void prune(double min) {
