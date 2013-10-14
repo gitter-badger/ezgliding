@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/cron/crawl-netcoupe</url>
+    <description>Crawl a netcoupe server looking for new flights</description>
+    <schedule>every 5 minutes</schedule>
+  </cron>
+</cronentries>

@@ -1,0 +1,8 @@
+<queue-entries>
+  <queue>
+    <name>flight-process</name>
+    <rate>1/s</rate>
+    <bucket-size>20</bucket-size>
+    <max-concurrent-requests>5</max-concurrent-requests>
+  </queue>
+</queue-entries>
